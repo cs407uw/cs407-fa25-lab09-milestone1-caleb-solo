@@ -56,8 +56,8 @@ class BallViewModel : ViewModel() {
                 val ns2s = 1.0f / 1000000000.0f
                 val dT = (event.timestamp - lastTimestamp) * ns2s
 
-                val xAcc = -event.values[0]
-                val yAcc = event.values[1]
+                val xAcc = -event.values[0] * 20
+                val yAcc = event.values[1] * 20
                 // TODO: Update the ball's position and velocity
                 // Hint: The sensor's x and y-axis are inverted
                 // currentBall.updatePositionAndVelocity(xAcc = ..., yAcc = ..., dT = ...)
