@@ -24,6 +24,7 @@ class Ball(
 
     init {
         // TODO: Call reset()
+        reset()
     }
 
     /**
@@ -37,7 +38,36 @@ class Ball(
             accY = yAcc
             return
         }
+        val a0x = accX
+        val a0y = accY
 
+        // New accelerations (a1) from the sensor
+        val a1x = xAcc
+        val a1y = yAcc
+
+        val v0x = velocityX
+        val v0y = velocityY
+
+
+        val v1x = v0x + 0.5f * (a0x + a1x) * dT
+        val v1y = v0y + 0.5f * (a0y + a1y) * dT
+
+
+        val dt2 = dT * dT
+        val dx = v0x * dT + (1f / 6f) * dt2 * (3f * a0x + a1x)
+        val dy = v0y * dT + (1f / 6f) * dt2 * (3f * a0y + a1y)
+
+        posX += dx
+        posY += dy
+
+        velocityX = v1x
+        velocityY = v1y
+
+
+        accX = a1x
+        accY = a1y
+
+        checkBoundaries()
     }
 
     /**
@@ -47,7 +77,30 @@ class Ball(
      */
     fun checkBoundaries() {
         // TODO: implement the checkBoundaries function
-        // (Check all 4 walls: left, right, top, bottom)
+
+        if (posX < 0f) {
+            posX = 0f
+            velocityX = 0f
+            accX = 0f
+        }
+        // Right wall
+        if (posX + ballSize > backgroundWidth) {
+            posX = backgroundWidth - ballSize
+            velocityX = 0f
+            accX = 0f
+        }
+        // Top wall
+        if (posY < 0f) {
+            posY = 0f
+            velocityY = 0f
+            accY = 0f
+        }
+        // Bottom wall
+        if (posY + ballSize > backgroundHeight) {
+            posY = backgroundHeight - ballSize
+            velocityY = 0f
+            accY = 0f
+        }
     }
 
     /**
@@ -57,5 +110,12 @@ class Ball(
     fun reset() {
         // TODO: implement the reset function
         // (Reset posX, posY, velocityX, velocityY, accX, accY, isFirstUpdate)
+        posX = (backgroundWidth - ballSize) / 2f
+        posY = (backgroundHeight - ballSize) / 2f
+        velocityX = 0f
+        velocityY = 0f
+        accX = 0f
+        accY = 0f
+        isFirstUpdate = true
     }
 }
